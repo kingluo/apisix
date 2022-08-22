@@ -79,6 +79,7 @@ end
 function _M.attach_consumer(ctx, consumer, conf)
     ctx.consumer = consumer
     ctx.consumer_name = consumer.consumer_name
+    ctx.consumer_group_id = consumer.group_name
     ctx.consumer_ver = conf.conf_version
 end
 
