@@ -259,6 +259,10 @@ http {
     lua_shared_dict plugin-limit-count-redis-cluster-slot-lock {* http.lua_shared_dict["plugin-limit-count-redis-cluster-slot-lock"] *};
     {% end %}
 
+    {% if enabled_plugins["quota"] then %}
+    lua_shared_dict plugin-quota {* http.lua_shared_dict["plugin-quota"] *};
+    {% end %}
+
     {% if enabled_plugins["prometheus"] and not enabled_stream_plugins["prometheus"] then %}
     lua_shared_dict prometheus-metrics {* http.lua_shared_dict["prometheus-metrics"] *};
     {% end %}
