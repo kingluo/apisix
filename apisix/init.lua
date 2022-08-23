@@ -438,8 +438,8 @@ function _M.http_access_phase()
         if api_ctx.consumer then
             local changed
             local group_conf
-            if api_ctx.consumer.group_name then
-                group_conf = consumer_group.get(api_ctx.consumer.group_name)
+            if api_ctx.consumer.group_id then
+                group_conf = consumer_group.get(api_ctx.consumer.group_id)
             end
             route, changed = plugin.merge_consumer_route(
                 route,
