@@ -93,8 +93,8 @@ function _M.access(conf, ctx)
         return 500, {error_msg = "failed to quota"}
     end
 
-    core.response.set_header("X-RateLimit-Limit", conf.minute,
-        "X-RateLimit-Remaining", remaining)
+    core.response.set_header("X-QuotaLimit-Limit", conf.minute,
+        "X-QuotaLimit-Remaining", remaining)
 end
 
 
