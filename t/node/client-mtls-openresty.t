@@ -114,4 +114,4 @@ curl --cert t/certs/apisix.crt --key t/certs/apisix.key -k https://localhost:199
 --- response_body eval
 qr/400 Bad Request/
 --- error_log
-client certificate verification is not passed: FAILED:self signed certificate
+client certificate verification is not passed: FAILED:self-signed certificate

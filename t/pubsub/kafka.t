@@ -331,7 +331,7 @@ all brokers failed in fetch topic metadata
         }
     }
 --- error_log
-self signed certificate
+self-signed certificate
 
 
 

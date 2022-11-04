@@ -503,7 +503,7 @@ location /t {
 GET /t
 --- response_body
 connected: 1
-failed to do SSL handshake: 18: self signed certificate
+failed to do SSL handshake: 18: self-signed certificate
 --- error_log
 server name: "www.test2.com"
 --- no_error_log
@@ -706,7 +706,7 @@ location /t {
 GET /t
 --- response_body
 connected: 1
-failed to do SSL handshake: 18: self signed certificate
+failed to do SSL handshake: 18: self-signed certificate
 --- error_log
 server name: "www.test2.com"
 --- no_error_log
@@ -787,7 +787,7 @@ location /t {
 GET /t
 --- response_body
 connected: 1
-failed to do SSL handshake: 18: self signed certificate
+failed to do SSL handshake: 18: self-signed certificate
 --- error_log
 server name: "test2.com"
 --- no_error_log
