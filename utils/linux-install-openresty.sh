@@ -40,10 +40,10 @@ if [ "$OPENRESTY_VERSION" == "source" ]; then
     patch -p1 < ../openssl-3.0-sess_set_get_cb_yield.patch
     ./Configure enable-fips
     sudo make install
-    sudo /usr/local/bin/openssl fipsinstall -out /usr/local/ssl/fipsmodule.cnf -module /usr/local/lib64/ossl-modules/fips.so
-    sudo cp -a ../openssl.cnf /usr/local/ssl/
     sudo bash -c 'echo /usr/local/lib64 > /etc/ld.so.conf.d/lib64.conf'
     sudo ldconfig
+    sudo /usr/local/bin/openssl fipsinstall -out /usr/local/ssl/fipsmodule.cnf -module /usr/local/lib64/ossl-modules/fips.so
+    sudo cp -a ../openssl.cnf /usr/local/ssl/
     export cc_opt="-I/usr/local/include"
     export ld_opt="-L/usr/local/lib64 -Wl,-rpath,/usr/local/lib64"
     cd ..
