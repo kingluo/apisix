@@ -33,12 +33,26 @@ sudo apt-get update
 abt_branch=${abt_branch:="master"}
 
 if [ "$OPENRESTY_VERSION" == "source" ]; then
+    # openssl 3.0 with openresty patch and fips enabled
+    sudo apt install -y build-essential
+    git clone https://github.com/openssl/openssl
+    cd openssl
+    patch -p0 < ../openssl-3.0-sess_set_get_cb_yield.patch
+    ./Configure enable-fips
+    sudo make install
+    sudo /usr/local/bin/openssl fipsinstall -out /usr/local/ssl/fipsmodule.cnf -module /usr/local/lib64/ossl-modules/fips.so
+    sudo cp -a ../openssl.cnf /usr/local/ssl/
+    sudo bash -c 'echo /usr/local/lib64 > /etc/ld.so.conf.d/lib64.conf'
+    sudo ldconfig
+    export cc_opt="-I/usr/local/include"
+    export ld_opt="-L/usr/local/lib64 -Wl,-rpath,/usr/local/lib64"
+    cd ..
+
     cd ..
     wget https://raw.githubusercontent.com/api7/apisix-build-tools/$abt_branch/build-apisix-base.sh
     chmod +x build-apisix-base.sh
     ./build-apisix-base.sh latest
 
-    sudo apt-get install openresty-openssl111-debug-dev
     exit 0
 fi
 
