@@ -255,6 +255,7 @@ received: Server: APISIX/\d\.\d+(\.\d+)?
 received: \nreceived: hello world
 close: 1 nil}
 --- error_log
+SSL: error:1C800064:Provider routines::bad decrypt
 server name: "www.test.com"
 [alert]
 
