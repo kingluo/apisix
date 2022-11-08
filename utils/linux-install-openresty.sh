@@ -53,6 +53,7 @@ if [ "$OPENRESTY_VERSION" == "source" ]; then
     chmod +x build-apisix-base.sh
     ./build-apisix-base.sh latest
 
+    sudo apt-get install openresty-openssl111-debug-dev
     exit 0
 fi
 

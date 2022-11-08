@@ -269,10 +269,6 @@ received: Connection: close
 received: Server: APISIX/\d\.\d+(\.\d+)?
 received: \nreceived: hello world
 close: 1 nil}
---- error_log
-[crit]
-server name: "www.test.com"
-[alert]
 
 
 
