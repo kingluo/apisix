@@ -26,7 +26,8 @@ add_block_preprocessor( sub{
         $block->set_value("request", "GET /t");
     }
 
-    if ((!defined $block->error_log) && (!defined $block->no_error_log)) {
+    if ((!defined $block->error_log) && (!defined $block->no_error_log)
+        && (!defined $block->ignore_error_log)) {
         $block->set_value("no_error_log", "[error]");
     }
 
@@ -269,6 +270,7 @@ received: Connection: close
 received: Server: APISIX/\d\.\d+(\.\d+)?
 received: \nreceived: hello world
 close: 1 nil}
+--- ignore_error_log
 
 
 
