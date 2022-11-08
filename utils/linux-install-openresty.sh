@@ -37,13 +37,12 @@ if [ "$OPENRESTY_VERSION" == "source" ]; then
     sudo apt install -y build-essential
     git clone https://github.com/openssl/openssl
     cd openssl
-    patch -p1 < ../openssl-3.0-sess_set_get_cb_yield.patch
     ./Configure enable-fips
     sudo make install
     sudo bash -c 'echo /usr/local/lib64 > /etc/ld.so.conf.d/lib64.conf'
     sudo ldconfig
     sudo /usr/local/bin/openssl fipsinstall -out /usr/local/ssl/fipsmodule.cnf -module /usr/local/lib64/ossl-modules/fips.so
-    sudo cp -a ../openssl.cnf /usr/local/ssl/
+    sudo sed -i 's/#\( .include fipsmodule.cnf\)/\1/g; s/#\( fips = fips_sect\)/\1/g' /usr/local/ssl/openssl.cnf
     export cc_opt="-I/usr/local/include"
     export ld_opt="-L/usr/local/lib64 -Wl,-rpath,/usr/local/lib64"
     cd ..
