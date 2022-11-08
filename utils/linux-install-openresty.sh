@@ -42,7 +42,7 @@ if [ "$OPENRESTY_VERSION" == "source" ]; then
     sudo bash -c 'echo /usr/local/lib64 > /etc/ld.so.conf.d/lib64.conf'
     sudo ldconfig
     sudo /usr/local/bin/openssl fipsinstall -out /usr/local/ssl/fipsmodule.cnf -module /usr/local/lib64/ossl-modules/fips.so
-    sudo sed -i 's@# .include fipsmodule.cnf@.include /usr/local/ssl/fipsmodule.cnf@g; s/# \(fips = fips_sect\)/\1/g' /usr/local/ssl/openssl.cnf
+    sudo sed -i 's@# .include fipsmodule.cnf@.include /usr/local/ssl/fipsmodule.cnf@g; s/# \(fips = fips_sect\)/\1\nbase = base_sect\n\n[base_sect]\nactivate=1\n/g' /usr/local/ssl/openssl.cnf
     export cc_opt="-I/usr/local/include"
     export ld_opt="-L/usr/local/lib64 -Wl,-rpath,/usr/local/lib64"
     cd ..
