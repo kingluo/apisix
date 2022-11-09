@@ -33,19 +33,23 @@ sudo apt-get update
 abt_branch=${abt_branch:="master"}
 
 if [ "$OPENRESTY_VERSION" == "source" ]; then
-    # openssl 3.0 with openresty patch and fips enabled
-    sudo apt install -y build-essential
-    git clone https://github.com/openssl/openssl
-    cd openssl
-    ./Configure enable-fips
-    sudo make install
-    sudo bash -c 'echo /usr/local/lib64 > /etc/ld.so.conf.d/lib64.conf'
-    sudo ldconfig
-    sudo /usr/local/bin/openssl fipsinstall -out /usr/local/ssl/fipsmodule.cnf -module /usr/local/lib64/ossl-modules/fips.so
-    sudo sed -i 's@# .include fipsmodule.cnf@.include /usr/local/ssl/fipsmodule.cnf@g; s/# \(fips = fips_sect\)/\1\nbase = base_sect\n\n[base_sect]\nactivate=1\n/g' /usr/local/ssl/openssl.cnf
-    export cc_opt="-I/usr/local/include"
-    export ld_opt="-L/usr/local/lib64 -Wl,-rpath,/usr/local/lib64"
-    cd ..
+    if [ "$COMPILE_OPENSSL3" == "yes" ]; then
+        sudo apt install -y build-essential
+        git clone https://github.com/openssl/openssl
+        cd openssl
+        ./Configure --prefix=/usr/local/openssl-3.0 enable-fips
+        sudo make install
+        sudo /usr/local/openssl-3.0/bin/openssl fipsinstall -out /usr/local/openssl-3.0/ssl/fipsmodule.cnf -module /usr/local/openssl-3.0/lib64/ossl-modules/fips.so
+        sudo sed -i 's@# .include fipsmodule.cnf@.include /usr/local/openssl-3.0/ssl/fipsmodule.cnf@g; s/# \(fips = fips_sect\)/\1\nbase = base_sect\n\n[base_sect]\nactivate=1\n/g' /usr/local/openssl-3.0/ssl/openssl.cnf
+        cd ..
+    fi
+
+    if [ "$USE_OPENSSL3" == "yes" ]; then
+        sudo bash -c 'echo /usr/local/openssl-3.0/lib64 > /etc/ld.so.conf.d/lib64.conf'
+        sudo ldconfig
+        export cc_opt="-I/usr/local/openssl-3.0/include"
+        export ld_opt="-L/usr/local/openssl-3.0/lib64 -Wl,-rpath,/usr/local/openssl-3.0/lib64"
+    fi
 
     cd ..
     wget https://raw.githubusercontent.com/api7/apisix-build-tools/$abt_branch/build-apisix-base.sh
