@@ -40,7 +40,7 @@ if [ "$OPENRESTY_VERSION" == "source" ]; then
         sudo apt install -y build-essential
         git clone https://github.com/openssl/openssl
         cd openssl
-        ./Configure --prefix=~/openssl-3.0 enable-fips
+        ./Configure --prefix=$HOME/openssl-3.0 enable-fips
         sudo make install
         sudo bash -c "echo $HOME/openssl-3.0/lib64 > /etc/ld.so.conf.d/openssl3.conf"
         sudo ldconfig
