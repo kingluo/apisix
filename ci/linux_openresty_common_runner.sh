@@ -35,8 +35,6 @@ do_install() {
 
     create_lua_deps
 
-    sed -i 's/local _C = ffi.C/local _C = ffi.load("libcrypto.so.1.1")/g' deps/share/lua/5.1/resty/evp.lua
-
     # sudo apt-get install tree -y
     # tree deps
 

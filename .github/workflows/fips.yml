@@ -26,7 +26,7 @@ jobs:
           - linux_openresty
         test_dir:
           - t/plugin/jwt-auth2.t t/plugin/hmac-auth2.t t/plugin/redirect.t t/plugin/http-logger.t t/plugin/clickhouse-logger.t t/plugin/openid-connect.t t/plugin/jwt-auth.t t/plugin/google-cloud-logging.t t/plugin/hmac-auth.t t/plugin/prometheus.t t/plugin/authz-keycloak.t t/plugin/batch-requests.t t/plugin/elasticsearch-logger.t
-          - t/admin/ssl* t/admin/schema.t t/admin/upstream.t t/cli t/config-center-yaml/ssl.t t/control t/core/etcd-mtls.t t/core/config_etcd.t t/deployment/conf_server.t t/misc/patch.t
+          - t/admin/ssl* t/admin/schema.t t/admin/upstream.t t/config-center-yaml/ssl.t t/core/etcd-mtls.t t/core/config_etcd.t t/deployment/conf_server.t t/misc/patch.t
           - t/node/grpc-proxy-unary.t t/node/upstream-keepalive-pool.t t/node/upstream-websocket.t t/node/client-mtls.t t/node/upstream-mtls.t t/pubsub/kafka.t t/router/radixtree-sni2.t t/router/multi-ssl-certs.t t/router/radixtree-sni.t t/stream-node/mtls.t t/stream-node/tls.t t/stream-node/upstream-tls.t t/stream-node/sni.t
 
     runs-on: ${{ matrix.platform }}
@@ -55,7 +55,7 @@ jobs:
         env:
           cache-name: cache-openssl
         with:
-          path: /usr/local/openssl-3.0
+          path: ~/openssl-3.0
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ matrix.os_name }}
 
       - name: Toggle openssl compile
