@@ -503,7 +503,7 @@ passed
 --- response_body
 true
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
 
 
 
@@ -565,7 +565,7 @@ x-access-token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhMSI6IkRhdGEgMSIsIml
 x-real-ip: 127.0.0.1
 --- error_code: 200
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
 
 
 
@@ -630,7 +630,7 @@ host: localhost
 x-real-ip: 127.0.0.1
 --- error_code: 200
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
 
 
 

@@ -314,7 +314,7 @@ qr/\{\"error\"\:\"[\w+\s+]*\"\}/
 Batch Processor[google-cloud-logging] failed to process entries
 Batch Processor[google-cloud-logging] exceeded the max_retry_count
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
 
 
 
@@ -379,7 +379,7 @@ GET /hello
 --- response_body
 hello world
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
 
 
 
@@ -444,7 +444,7 @@ GET /hello
 --- response_body
 hello world
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
 
 
 
@@ -563,7 +563,7 @@ GET /hello
 --- response_body
 hello world
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
 
 
 
@@ -662,7 +662,7 @@ GET /hello
 --- response_body
 hello world
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
 
 
 
@@ -762,4 +762,4 @@ GET /hello
 --- response_body
 hello world
 --- skip_openssl
-1: > 1.1.1
+1: >= 1.1.2
