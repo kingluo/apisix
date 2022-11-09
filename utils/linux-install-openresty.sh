@@ -34,26 +34,27 @@ abt_branch=${abt_branch:="master"}
 
 COMPILE_OPENSSL3=${COMPILE_OPENSSL3-no}
 USE_OPENSSL3=${USE_OPENSSL3-no}
+OPENSSL3_PREFIX=${OPENSSL3_PREFIX-/home/runner}
 
 if [ "$OPENRESTY_VERSION" == "source" ]; then
     if [ "$COMPILE_OPENSSL3" == "yes" ]; then
-        sudo apt install -y build-essential
+        apt install -y build-essential
         git clone https://github.com/openssl/openssl
         cd openssl
-        ./Configure --prefix=$HOME/openssl-3.0 enable-fips
-        sudo make install
-        sudo bash -c "echo $HOME/openssl-3.0/lib64 > /etc/ld.so.conf.d/openssl3.conf"
-        sudo ldconfig
-        sudo ~/openssl-3.0/bin/openssl fipsinstall -out ~/openssl-3.0/ssl/fipsmodule.cnf -module ~/openssl-3.0/lib64/ossl-modules/fips.so
-        sudo sed -i 's@# .include fipsmodule.cnf@.include '"$HOME"'/openssl-3.0/ssl/fipsmodule.cnf@g; s/# \(fips = fips_sect\)/\1\nbase = base_sect\n\n[base_sect]\nactivate=1\n/g' ~/openssl-3.0/ssl/openssl.cnf
+        ./Configure --prefix=$OPENSSL3_PREFIX/openssl-3.0 enable-fips
+        make install
+        bash -c "echo $OPENSSL3_PREFIX/openssl-3.0/lib64 > /etc/ld.so.conf.d/openssl3.conf"
+        ldconfig
+        $OPENSSL3_PREFIX/openssl-3.0/bin/openssl fipsinstall -out $OPENSSL3_PREFIX/openssl-3.0/ssl/fipsmodule.cnf -module $OPENSSL3_PREFIX/openssl-3.0/lib64/ossl-modules/fips.so
+        sed -i 's@# .include fipsmodule.cnf@.include '"$OPENSSL3_PREFIX"'/openssl-3.0/ssl/fipsmodule.cnf@g; s/# \(fips = fips_sect\)/\1\nbase = base_sect\n\n[base_sect]\nactivate=1\n/g' $OPENSSL3_PREFIX/openssl-3.0/ssl/openssl.cnf
         cd ..
     fi
 
     if [ "$USE_OPENSSL3" == "yes" ]; then
-        sudo bash -c "echo $HOME/openssl-3.0/lib64 > /etc/ld.so.conf.d/openssl3.conf"
-        sudo ldconfig
-        export cc_opt="-I$HOME/openssl-3.0/include"
-        export ld_opt="-L$HOME/openssl-3.0/lib64 -Wl,-rpath,$HOME/openssl-3.0/lib64"
+        bash -c "echo $OPENSSL3_PREFIX/openssl-3.0/lib64 > /etc/ld.so.conf.d/openssl3.conf"
+        ldconfig
+        export cc_opt="-I$OPENSSL3_PREFIX/openssl-3.0/include"
+        export ld_opt="-L$OPENSSL3_PREFIX/openssl-3.0/lib64 -Wl,-rpath,$OPENSSL3_PREFIX/openssl-3.0/lib64"
     fi
 
     cd ..

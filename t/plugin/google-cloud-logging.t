@@ -376,6 +376,8 @@ GET /hello
 --- wait: 2
 --- response_body
 hello world
+--- skip_openssl
+1: > 1.1.1
 
 
 
@@ -439,6 +441,8 @@ GET /hello
 --- wait: 2
 --- response_body
 hello world
+--- skip_openssl
+1: > 1.1.1
 
 
 
@@ -556,6 +560,8 @@ GET /hello
 --- wait: 2
 --- response_body
 hello world
+--- skip_openssl
+1: > 1.1.1
 
 
 
@@ -653,6 +659,8 @@ GET /hello
 --- wait: 2
 --- response_body
 hello world
+--- skip_openssl
+1: > 1.1.1
 
 
 
@@ -751,3 +759,5 @@ GET /hello
 --- wait: 2
 --- response_body
 hello world
+--- skip_openssl
+1: > 1.1.1

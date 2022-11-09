@@ -64,6 +64,7 @@ jobs:
         if: steps.cache-openssl.outputs.cache-hit != 'true'
         run: |
           echo "##[set-output name=openssl3;]$(echo 'yes')"
+          echo "##[set-output name=openssl3_prefix;]$HOME"
 
       - name: Extract test type
         shell: bash
@@ -114,10 +115,12 @@ jobs:
       - name: Linux Install
         env:
           COMPILE_OPENSSL3: ${{ steps.test_ssl_env.outputs.openssl3 }}
+          OPENSSL3_PREFIX: ${{ steps.test_ssl_env.outputs.openssl3_prefix }}
           USE_OPENSSL3: yes
         run: |
           sudo --preserve-env=OPENRESTY_VERSION \
           --preserve-env=COMPILE_OPENSSL3 \
+          --preserve-env=OPENSSL3_PREFIX \
           --preserve-env=USE_OPENSSL3 \
           ./ci/${{ matrix.os_name }}_runner.sh do_install
 
