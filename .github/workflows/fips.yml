@@ -74,10 +74,10 @@ jobs:
           if [[ $test_dir =~ 't/plugin' ]]; then
             echo "##[set-output name=type;]$(echo 'plugin')"
           fi
-          if [[ $test_dir =~ 't/admin ' ]]; then
+          if [[ $test_dir =~ 't/admin' ]]; then
             echo "##[set-output name=type;]$(echo 'first')"
           fi
-          if [[ $test_dir =~ ' t/node' ]]; then
+          if [[ $test_dir =~ 't/node' ]]; then
             echo "##[set-output name=type;]$(echo 'last')"
           fi
 
