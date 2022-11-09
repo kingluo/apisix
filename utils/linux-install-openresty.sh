@@ -42,13 +42,15 @@ if [ "$OPENRESTY_VERSION" == "source" ]; then
         cd openssl
         ./Configure --prefix=/usr/local/openssl-3.0 enable-fips
         sudo make install
+        sudo bash -c 'echo /usr/local/openssl-3.0/lib64 > /etc/ld.so.conf.d/openssl3.conf'
+        sudo ldconfig
         sudo /usr/local/openssl-3.0/bin/openssl fipsinstall -out /usr/local/openssl-3.0/ssl/fipsmodule.cnf -module /usr/local/openssl-3.0/lib64/ossl-modules/fips.so
         sudo sed -i 's@# .include fipsmodule.cnf@.include /usr/local/openssl-3.0/ssl/fipsmodule.cnf@g; s/# \(fips = fips_sect\)/\1\nbase = base_sect\n\n[base_sect]\nactivate=1\n/g' /usr/local/openssl-3.0/ssl/openssl.cnf
         cd ..
     fi
 
     if [ "$USE_OPENSSL3" == "yes" ]; then
-        sudo bash -c 'echo /usr/local/openssl-3.0/lib64 > /etc/ld.so.conf.d/lib64.conf'
+        sudo bash -c 'echo /usr/local/openssl-3.0/lib64 > /etc/ld.so.conf.d/openssl3.conf'
         sudo ldconfig
         export cc_opt="-I/usr/local/openssl-3.0/include"
         export ld_opt="-L/usr/local/openssl-3.0/lib64 -Wl,-rpath,/usr/local/openssl-3.0/lib64"
