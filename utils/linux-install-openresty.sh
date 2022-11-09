@@ -32,6 +32,9 @@ sudo apt-get update
 
 abt_branch=${abt_branch:="master"}
 
+COMPILE_OPENSSL3=${COMPILE_OPENSSL3-no}
+USE_OPENSSL3=${USE_OPENSSL3-no}
+
 if [ "$OPENRESTY_VERSION" == "source" ]; then
     if [ "$COMPILE_OPENSSL3" == "yes" ]; then
         sudo apt install -y build-essential
