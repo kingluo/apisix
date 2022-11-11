@@ -203,7 +203,6 @@ discovery:
   consul_kv:
     servers:
       - "http://127.0.0.1:8500"
-      - "http://127.0.0.1:6500"
 #END
 --- apisix_yaml
 routes:
@@ -244,6 +243,8 @@ routes:
     "missing consul_kv services\n",
     "missing consul_kv services\n"
 ]
+--- error_log
+fetch nodes failed
 
 
 
@@ -284,6 +285,8 @@ routes:
 GET /hello
 --- response_body eval
 "missing consul_kv services\n"
+--- error_log
+fetch nodes failed
 
 
 
@@ -360,6 +363,8 @@ location /sleep {
     qr/server [1-2]\n/,
     qr/server [1-2]\n/
 ]
+--- error_log
+with error: 404
 
 
 
@@ -513,6 +518,9 @@ location /sleep {
     qr/ok\n/,
     qr/server 1\n/
 ]
+--- error_log
+with error: 404
+fetch nodes failed
 
 
 
