@@ -144,7 +144,6 @@ GET /hello
 --- response_body
 hello world
 --- wait: 2
---- ignore_error_log
 
 
 
