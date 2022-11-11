@@ -243,8 +243,7 @@ routes:
     "missing consul_kv services\n",
     "missing consul_kv services\n"
 ]
---- error_log
-fetch nodes failed
+--- ignore_error_log
 
 
 
