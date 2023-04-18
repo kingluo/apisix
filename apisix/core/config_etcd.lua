@@ -157,33 +157,46 @@ local function flush_watching_streams(self)
 end
 
 
-local function http_waitdir(etcd_cli, key, modified_index, timeout)
-    local opts = {}
-    opts.start_revision = modified_index
-    opts.timeout = timeout
-    opts.need_cancel = true
-    local res_func, func_err, http_cli = etcd_cli:watchdir(key, opts)
-    if not res_func then
-        return nil, func_err
-    end
-
-    -- in etcd v3, the 1st res of watch is watch info, useless to us.
-    -- try twice to skip create info
-    local res, err = res_func()
-    if not res or not res.result or not res.result.events then
-        res, err = res_func()
-    end
-
-    if http_cli then
-        local res_cancel, err_cancel = etcd_cli:watchcancel(http_cli)
+local function close_watch(self)
+    if self.etcd_conn.http_cli then
+        local res_cancel, err_cancel = self.etcd_cli:watchcancel(self.etcd_conn.http_cli)
         if res_cancel == 1 then
             log.info("cancel watch connection success")
         else
             log.error("cancel watch failed: ", err_cancel)
         end
     end
+    self.etcd_conn = nil
+end
+
+
+local function http_waitdir(self, etcd_cli, key, modified_index, timeout)
+    if not self.etcd_conn then
+        local opts = {}
+        opts.start_revision = modified_index
+        opts.timeout = timeout
+        opts.need_cancel = true
+        local res_func, func_err, http_cli = etcd_cli:watchdir(key, opts)
+        if not res_func then
+            return nil, func_err
+        end
+        self.etcd_conn = {res_func = res_func, http_cli = http_cli}
+    end
+
+    local res, err = self.etcd_conn.res_func()
+    if not res then
+        close_watch(self)
+        return nil, err
+    end
+
+    -- in etcd v3, the 1st res of watch is watch info, useless to us.
+    -- try twice to skip create info
+    if not res.result or not res.result.events then
+        res, err = self.etcd_conn.res_func()
+    end
 
     if not res then
+        close_watch(self)
         return nil, err
     end
 
@@ -192,6 +205,7 @@ local function http_waitdir(etcd_cli, key, modified_index, timeout)
         if res.error and res.error.message then
             err = err .. ": " .. res.error.message
         end
+        close_watch(self)
         return nil, err
     end
 
@@ -213,7 +227,7 @@ local function waitdir(self)
     if etcd_cli.use_grpc then
         res, err = grpc_waitdir(self, etcd_cli, key, modified_index, timeout)
     else
-        res, err = http_waitdir(etcd_cli, key, modified_index, timeout)
+        res, err = http_waitdir(self, etcd_cli, key, modified_index, timeout)
     end
 
     if not res then
