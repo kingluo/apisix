@@ -82,6 +82,18 @@ end
 _M.new = new
 
 
+local admin_api_etcd_cli, admin_api_prefix
+local function new_cached()
+    if not admin_api_etcd_cli then
+        admin_api_etcd_cli, admin_api_prefix = new()
+    end
+    if admin_api_etcd_cli then
+        return admin_api_etcd_cli, admin_api_prefix
+    end
+    return new()
+end
+
+
 -- convert ETCD v3 entry to v2 one
 local function kvs_to_node(kvs)
     local node = {}
@@ -194,7 +206,7 @@ end
 
 
 function _M.get(key, is_dir)
-    local etcd_cli, prefix, err = new()
+    local etcd_cli, prefix, err = new_cached()
     if not etcd_cli then
         return nil, err
     end
@@ -213,7 +225,7 @@ end
 
 
 local function set(key, value, ttl)
-    local etcd_cli, prefix, err = new()
+    local etcd_cli, prefix, err = new_cached()
     if not etcd_cli then
         return nil, err
     end
@@ -253,7 +265,7 @@ _M.set = set
 
 
 function _M.atomic_set(key, value, ttl, mod_revision)
-    local etcd_cli, prefix, err = new()
+    local etcd_cli, prefix, err = new_cached()
     if not etcd_cli then
         return nil, err
     end
@@ -312,7 +324,7 @@ end
 
 
 function _M.push(key, value, ttl)
-    local etcd_cli, _, err = new()
+    local etcd_cli, _, err = new_cached()
     if not etcd_cli then
         return nil, err
     end
@@ -344,7 +356,7 @@ end
 
 
 function _M.delete(key)
-    local etcd_cli, prefix, err = new()
+    local etcd_cli, prefix, err = new_cached()
     if not etcd_cli then
         return nil, err
     end
@@ -382,7 +394,7 @@ end
 -- --   etcdserver = "3.5.0"
 -- -- }
 function _M.server_version()
-    local etcd_cli, err = new()
+    local etcd_cli, err = new_cached()
     if not etcd_cli then
         return nil, err
     end
@@ -392,7 +404,7 @@ end
 
 
 function _M.keepalive(id)
-    local etcd_cli, _, err = new()
+    local etcd_cli, _, err = new_cached()
     if not etcd_cli then
         return nil, err
     end
