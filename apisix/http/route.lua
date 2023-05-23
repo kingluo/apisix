@@ -93,13 +93,21 @@ function _M.create_radixtree_uri_router(routes, uri_routes, with_parameter)
 
     core.log.info("route items: ", core.json.delay_encode(uri_routes, true))
 
+    local uri_router
     if with_parameter then
-        return radixtree.new(uri_routes)
+        uri_router = radixtree.new(uri_routes)
     else
-        return router.new(uri_routes)
+        uri_router = router.new(uri_routes)
     end
+
+    core.log.warn("create_radixtree_uri_router: new=", tostring(uri_router),
+        ", routes=", require("inspect")(routes),
+        ", uri_routes=", require("inspect")(uri_routes))
+
+    return uri_router
 end
 
+local routing = {start_timestamp=ngx.time()}
 
 function _M.match_uri(uri_router, match_opts, api_ctx)
     core.table.clear(match_opts)
@@ -110,6 +118,18 @@ function _M.match_uri(uri_router, match_opts, api_ctx)
     match_opts.matched = core.tablepool.fetch("matched_route_record", 0, 4)
 
     local ok = uri_router:dispatch(api_ctx.var.uri, match_opts, api_ctx, match_opts)
+
+    if ok then
+        local rt = api_ctx.matched_route
+        local k = tostring(uri_router) .. "#" .. rt.value.id .. "#" .. rt.orig_modifiedIndex
+        routing[k] = routing[k] and (routing[k]+1) or 1
+        local cur = ngx.time()
+        if cur - routing.start_timestamp >= 10 then
+            core.log.warn("routing: ", require("inspect")(routing))
+            routing = {start_timestamp=cur}
+        end
+    end
+
     return ok
 end
 
