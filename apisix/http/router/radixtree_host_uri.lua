@@ -134,7 +134,26 @@ local function create_radixtree_router(routes)
 
     -- create router: only_uri_router
     only_uri_router = router.new(only_uri_routes)
+
+    core.log.warn("create_radixtree_uri_router: ",
+        ", host_router=", tostring(host_router),
+        ", only_uri_router=", tostring(only_uri_router),
+        ", routes=", require("inspect")(routes))
+
     return true
+end
+
+
+local routing = {start_timestamp=ngx.time()}
+local function log_routing(api_ctx, router)
+    local rt = api_ctx.matched_route
+    local k = tostring(router) .. "#" .. rt.value.id .. "#" .. rt.orig_modifiedIndex
+    routing[k] = routing[k] and (routing[k]+1) or 1
+    local cur = ngx.time()
+    if cur - routing.start_timestamp >= 10 then
+        core.log.warn("routing: ", require("inspect")(routing))
+        routing = {start_timestamp=cur}
+    end
 end
 
 
@@ -170,11 +189,15 @@ function _M.match(api_ctx)
                 api_ctx.curr_req_matched._host = api_ctx.real_curr_req_matched_host:reverse()
                 api_ctx.real_curr_req_matched_host = nil
             end
+            log_routing(api_ctx, host_router)
             return true
         end
     end
 
     local ok = only_uri_router:dispatch(api_ctx.var.uri, match_opts, api_ctx, match_opts)
+    if ok then
+        log_routing(api_ctx, only_uri_router)
+    end
     return ok
 end
 
