@@ -73,6 +73,18 @@ script() {
 
     make init
 
+    if [[ "$TEST_HTTP3" == "http3" ]]; then
+        # build http3 curl
+        ./t/http3/build_curl.sh
+
+        # run all http3 test files
+        for t in t/http3/test_*.sh; do
+            $t
+        done
+
+        return
+    fi
+
     set_coredns
 
     ./t/grpc_server_example/grpc_server_example \

@@ -29,10 +29,11 @@ jobs:
         os_name:
           - linux_openresty
         test_dir:
-          - t/plugin/[a-k]*
-          - t/plugin/[l-z]*
-          - t/admin t/cli t/config-center-yaml t/control t/core t/debug t/deployment t/discovery t/error_page t/misc
-          - t/node t/pubsub t/router t/script t/secret t/stream-node t/utils t/wasm t/xds-library t/xrpc
+          #- t/plugin/[a-k]*
+          #- t/plugin/[l-z]*
+          #- t/admin t/cli t/config-center-yaml t/control t/core t/debug t/deployment t/discovery t/error_page t/misc
+          #- t/node t/pubsub t/router t/script t/secret t/stream-node t/utils t/wasm t/xds-library t/xrpc
+          - t/http3
 
     runs-on: ${{ matrix.platform }}
     timeout-minutes: 90
@@ -80,6 +81,9 @@ jobs:
           fi
           if [[ $test_dir =~ ' t/xrpc' ]]; then
             echo "type=last" >>$GITHUB_OUTPUT
+          fi
+          if [[ $test_dir =~ 't/http3' ]]; then
+            echo "type=http3" >>$GITHUB_OUTPUT
           fi
 
       - name: Free disk space
@@ -169,6 +173,7 @@ jobs:
       - name: Linux Script
         env:
           TEST_FILE_SUB_DIR: ${{ matrix.test_dir }}
+          TEST_HTTP3: ${{ steps.test_env.outputs.type }}
         run: sudo -E ./ci/${{ matrix.os_name }}_runner.sh script
 
       - if: ${{ steps.cache-images.outputs.cache-hit != 'true' }}
