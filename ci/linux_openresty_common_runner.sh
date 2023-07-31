@@ -76,6 +76,7 @@ script() {
     if [[ "$TEST_HTTP3" == "http3" ]]; then
         # build http3 curl
         ./t/http3/build_curl.sh
+        ldconfig
 
         # run all http3 test files
         for t in t/http3/test_*.sh; do
