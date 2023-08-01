@@ -7,7 +7,7 @@ set -x
 ## TEST 1: test basic config of proxy-rewrite plugin
 
 # configure apisix
-ADMIN put /apisix/admin/routes/1 -s -d '{
+ADMIN put /routes/1 -s -d '{
     "uri": "/httpbin/*",
     "plugins": {
         "proxy-rewrite": {
