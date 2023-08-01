@@ -38,10 +38,13 @@ ADMIN put /apisix/admin/routes/1 -s -d '{
 REQ /httpbin/anything --http3-only
 
 # validate the response headers
-GREP "HTTP/3 200"
+GREP -x "HTTP/3 200"
+GREP -F "server: APISIX/3"
 
 # validate the response body, e.g. JSON body
+GREP_BODY -F '"User-Agent": "curl/8.3.0-DEV"'
 JQ '.headers.Host=="foo.bar"'
+JQ '.url=="https://foo.bar/httpbin/get"'
 
 ## TEST 2: test others
 ## ...

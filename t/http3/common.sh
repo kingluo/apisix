@@ -14,6 +14,10 @@ GREP() {
     grep "$@" ${tmpfile}-1
 }
 
+GREP_BODY() {
+    grep "$@" ${tmpfile}-2
+}
+
 JQ() {
     jq -e "$@" < ${tmpfile}-2
 }
@@ -29,12 +33,16 @@ REQ() {
     # split the response into headers and body
     path=${tmpfile}-1
     while read -r line; do
-        echo $line >> $path
+        echo $line | sed 's/ \r//g' | sed 's/\r//g' >> $path
         if [[ "$line" == $'\r' ]]; then
             path=${tmpfile}-2
         fi
     done < ${tmpfile}
 }
+
+if [[ ! -f ./logs/nginx.pid ]]; then
+    ./bin/apisix start
+fi
 
 tmpfile=$(mktemp)
 trap cleanup EXIT INT TERM
