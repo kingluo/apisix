@@ -74,14 +74,14 @@ script() {
     make init
 
     if [[ "$TEST_HTTP3" == "http3" ]]; then
-        apt -y install jq
+        apt -y install jq jo
 
         # build http3 curl
         ./t/http3/build_curl.sh
         ldconfig
 
         # run all http3 test files
-        for t in t/http3/test_*.sh; do
+        for t in t/http3/test-*.sh; do
             $t
         done
 

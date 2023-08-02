@@ -27,8 +27,13 @@ cleanup() {
 }
 
 REQ() {
-    #curl https://localhost:9443/httpbin/anything -s --http3-only -i -k &>${tmpfile}
+    eval rm -f "${tmpfile}*"
     curl -s -i -k https://localhost:9443"$@" &>${tmpfile}
+    err=$?
+    if [[ $err != 0 ]]; then
+        curl -s -v -k https://localhost:9443"$@"
+        return $err
+    fi
 
     # split the response into headers and body
     path=${tmpfile}-1
