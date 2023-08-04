@@ -27,7 +27,7 @@ REQ /anything/foobar --http3-only
 GREP -x "HTTP/3 404"
 
 count_404() {
-    curl http://127.0.0.1:9091/apisix/prometheus/metrics 2>&1 | \
+    curl http://127.0.0.1:9091/apisix/prometheus/metrics 2>&1 | tee | \
         grep -F 'apisix_http_status{code="404",route="1",matched_uri="/anything/*"' | \
         awk '{print $2}'
 }
