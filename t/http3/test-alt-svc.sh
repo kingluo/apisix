@@ -18,10 +18,12 @@ ADMIN put /routes/1 -s -d '{
     }
 }'
 
-REQ /httpbin/get --alt-svc altsvc.cache
+tmpdir=$(mktemp -d)
+
+REQ /httpbin/get --alt-svc $tmpdir/.altsvc.cache
 GREP -x "HTTP/1.1 200 OK"
 
-REQ /httpbin/get --alt-svc altsvc.cache
+REQ /httpbin/get --alt-svc $tmpdir/.altsvc.cache
 GREP -x "HTTP/3 200"
 
-rm -f altsvc.cache
+rm -rf $tmpdir
