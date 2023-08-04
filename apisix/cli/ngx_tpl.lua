@@ -665,6 +665,8 @@ http {
         {% end %}
 
         location / {
+            add_header Alt-Svc 'h3=":9443"; ma=86400';
+
             set $upstream_mirror_host        '';
             set $upstream_mirror_uri         '';
             set $upstream_upgrade            '';
