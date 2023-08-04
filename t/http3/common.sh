@@ -43,6 +43,7 @@ REQ() {
             path=${tmpfile}-2
         fi
     done < ${tmpfile}
+    #cat ${tmpfile}-1 ${tmpfile}-2
 }
 
 if [[ ! -f ./logs/nginx.pid ]]; then

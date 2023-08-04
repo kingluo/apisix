@@ -4,7 +4,7 @@ set -x
 
 . $(dirname "$0")/common.sh
 
-## TEST 1: query args, real-ip plugin, response-rewrite plugin
+echo TEST 1: query args, real-ip plugin, response-rewrite plugin
 
 # configure apisix
 ADMIN put /routes/1 -s -d '{

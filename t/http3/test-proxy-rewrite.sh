@@ -4,7 +4,7 @@ set -x
 
 . $(dirname "$0")/common.sh
 
-## TEST 1: test basic config of proxy-rewrite plugin
+echo TEST 1: test basic config of proxy-rewrite plugin
 
 # configure apisix
 ADMIN put /routes/1 -s -d '{
@@ -45,6 +45,3 @@ GREP -F "server: APISIX/3"
 GREP_BODY -F '"User-Agent": "curl/8.3.0-DEV"'
 JQ '.headers.Host=="foo.bar"'
 JQ '.url=="https://foo.bar/httpbin/get"'
-
-## TEST 2: test others
-## ...

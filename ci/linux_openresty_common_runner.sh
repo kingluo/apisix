@@ -82,6 +82,7 @@ script() {
 
         # run all http3 test files
         for t in t/http3/test-*.sh; do
+            echo -- $t
             $t
         done
 
