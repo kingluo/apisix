@@ -31,7 +31,9 @@ REQ() {
     curl -s -i -k https://localhost:9443"$@" &>${tmpfile}
     err=$?
     if [[ $err != 0 ]]; then
-        curl -s -v -k https://localhost:9443"$@"
+        if [[ $1 == "retry" ]]; then
+            curl -s -v -k https://localhost:9443"$@"
+        fi
         return $err
     fi
 
