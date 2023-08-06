@@ -132,14 +132,18 @@ else
     mv lua-resty-limit-traffic-$limit_ver bundle/lua-resty-limit-traffic-$or_limit_ver
 fi
 
+CACHE_QUICTLS_HIT=${CACHE_QUICTLS_HIT:-false}
+QUICTLS_TAG=${QUICTLS_TAG:-OpenSSL_1_1_1u-quic1}
+if [[ $CACHE_QUICTLS_HIT == false ]]; then
 (
-cd /opt
+cd /tmp
 git clone https://github.com/quictls/openssl quictls
 cd quictls
-git checkout OpenSSL_1_1_1u-quic1
-./config
-make
+git checkout ${QUICTLS_TAG}
+./config --prefix=/usr/local/openresty/quictls
+make install
 )
+fi
 
 set +e
 (
@@ -170,7 +174,7 @@ set -e
 
 export_openresty_variables()
 {
-    export openssl_prefix=/opt/quictls;
+    export openssl_prefix=/usr/local/openresty/quictls;
     export zlib_prefix=/usr/local/openresty/zlib;
     export pcre_prefix=/usr/local/openresty/pcre;
     export cc_opt="-DNGX_LUA_ABORT_AT_PANIC -I${zlib_prefix}/include -I${pcre_prefix}/include -I${openssl_prefix}/include";
