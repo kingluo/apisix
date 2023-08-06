@@ -115,7 +115,7 @@ jobs:
           path: docker-images-backup
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ steps.test_env.outputs.type }}-${{ hashFiles(format('./ci/pod/docker-compose.{0}.yml', steps.test_env.outputs.type )) }}
 
-      - if: steps.cache-images.outputs.cache-hit == 'true'
+      - if: steps.cache-images.outputs.cache-hit == 'true' && steps.test_env.outputs.type != 'http3'
         name: Load saved docker images
         run: |
           if [[ -f docker-images-backup/apisix-images.tar ]]; then
@@ -131,7 +131,7 @@ jobs:
               sudo ./ci/init-${{ steps.test_env.outputs.type }}-test-service.sh after
             fi
           fi
-      - if: steps.cache-images.outputs.cache-hit != 'true'
+      - if: steps.cache-images.outputs.cache-hit != 'true' && steps.test_env.outputs.type != 'http3'
         name: Linux launch services
         run: |
           [[ ${{ steps.test_env.outputs.type }} != first ]] && sudo ./ci/init-${{ steps.test_env.outputs.type }}-test-service.sh before
