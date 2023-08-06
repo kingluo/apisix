@@ -78,10 +78,14 @@ echo -n hello > $file1
 file2=$(mktemp)
 echo -n world > $file2
 
+gc() {
+    rm -f $file1 $file2
+}
+
+GC gc
+
 # send request
 REQ /httpbin/anything --http3 -F file1=@${file1} -F file2=@${file2}
-
-rm -f $file1 $file2
 
 # validate the response headers
 GREP -x "HTTP/3 200"

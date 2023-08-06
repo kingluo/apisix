@@ -11,41 +11,41 @@ ADMIN() {
 }
 
 GREP() {
-    grep "$@" ${tmpfile}-1
+    grep "$@" ${tmpfile}-headers
 }
 
 GREP_BODY() {
-    grep "$@" ${tmpfile}-2
+    grep "$@" ${tmpfile}-body
 }
 
 JQ() {
-    jq -e "$@" < ${tmpfile}-2
+    jq -e "$@" < ${tmpfile}-body
+}
+
+gc_fn_list=()
+
+GC() {
+    gc_fn_list+=("$@")
 }
 
 cleanup() {
+    set +e
+    for f in ${gc_fn_list[@]}; do
+        $f
+    done
+    set -e
+}
+
+rm_tmpfile() {
     eval rm -f "${tmpfile}*"
 }
 
-REQ() {
-    eval rm -f "${tmpfile}*"
-    curl -s -i -k https://localhost:9443"$@" &>${tmpfile}
-    err=$?
-    if [[ $err != 0 ]]; then
-        if [[ $1 == "retry" ]]; then
-            curl -s -v -k https://localhost:9443"$@"
-        fi
-        return $err
-    fi
+GC rm_tmpfile
 
-    # split the response into headers and body
-    path=${tmpfile}-1
-    while read -r line; do
-        echo $line | sed 's/ \r//g' | sed 's/\r//g' >> $path
-        if [[ "$line" == $'\r' ]]; then
-            path=${tmpfile}-2
-        fi
-    done < ${tmpfile}
-    #cat ${tmpfile}-1 ${tmpfile}-2
+REQ() {
+    rm_tmpfile
+    curl https://localhost:9443"$@" -k -s -S -v -D ${tmpfile}-headers -o ${tmpfile}-body
+    sed -i 's/ \r//g; s/\r//g' ${tmpfile}-headers
 }
 
 if [[ ! -f ./logs/nginx.pid ]]; then
@@ -62,4 +62,3 @@ ADMIN put /ssls/1 -d '{
         "localhost"
     ]
 }'
-

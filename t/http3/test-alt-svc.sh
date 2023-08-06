@@ -20,10 +20,14 @@ ADMIN put /routes/1 -s -d '{
 
 tmpdir=$(mktemp -d)
 
+gc() {
+    rm -rf $tmpdir
+}
+
+GC gc
+
 REQ /httpbin/get --alt-svc $tmpdir/.altsvc.cache
 GREP -x "HTTP/1.1 200 OK"
 
 REQ /httpbin/get --alt-svc $tmpdir/.altsvc.cache
 GREP -x "HTTP/3 200"
-
-rm -rf $tmpdir
