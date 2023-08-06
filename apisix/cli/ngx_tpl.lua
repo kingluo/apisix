@@ -616,7 +616,8 @@ http {
         {% if proxy_protocol and proxy_protocol.listen_https_port then %}
         listen {* proxy_protocol.listen_https_port *} ssl default_server proxy_protocol;
         {% end %}
-        listen 9443 quic reuseport;
+        listen 0.0.0.0:9443 quic reuseport;
+        listen [::]:9443 quic reuseport;
 
         server_name _;
 
