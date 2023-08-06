@@ -73,14 +73,6 @@ if [ "$OPENRESTY_VERSION" == "source" ]; then
     #chmod +x build-apisix-base.sh
     ./build-apisix-base.sh latest
 
-    echo $PWD
-    cd ..
-
-#find / -name '*pcre*.so'
-#find / -name '*pcre*.h'
-#dpkg -l |grep pcre
-#exit 1
-
     exit 0
 fi
 
