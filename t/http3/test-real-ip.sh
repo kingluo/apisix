@@ -31,7 +31,7 @@ ADMIN put /routes/1 -s -d '{
 }'
 
 # send request
-REQ '/httpbin/get?realip=127.0.0.100:666' --http3-only
+REQ '/httpbin/get?realip=127.0.0.100:666' --ipv4 --http3-only
 
 # validate the response headers
 GREP -x "HTTP/3 200"
