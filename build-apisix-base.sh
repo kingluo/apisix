@@ -221,6 +221,7 @@ export_openresty_variables
     --without-http_srcache_module \
     --without-http_redis_module \
     --without-http_redis2_module \
+    --without-pcre2 \
     --with-http_v3_module \
     $no_pool_patch \
     -j`nproc`
