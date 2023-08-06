@@ -29,10 +29,10 @@ jobs:
         os_name:
           - linux_openresty
         test_dir:
-          #- t/plugin/[a-k]*
-          #- t/plugin/[l-z]*
-          #- t/admin t/cli t/config-center-yaml t/control t/core t/debug t/deployment t/discovery t/error_page t/misc
-          #- t/node t/pubsub t/router t/script t/secret t/stream-node t/utils t/wasm t/xds-library t/xrpc
+          - t/plugin/[a-k]*
+          - t/plugin/[l-z]*
+          - t/admin t/cli t/config-center-yaml t/control t/core t/debug t/deployment t/discovery t/error_page t/misc
+          - t/node t/pubsub t/router t/script t/secret t/stream-node t/utils t/wasm t/xds-library t/xrpc
           - t/http3
 
     runs-on: ${{ matrix.platform }}
@@ -115,7 +115,7 @@ jobs:
           path: docker-images-backup
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ steps.test_env.outputs.type }}-${{ hashFiles(format('./ci/pod/docker-compose.{0}.yml', steps.test_env.outputs.type )) }}
 
-      - if: steps.cache-images.outputs.cache-hit == 'true' && steps.test_env.outputs.type != 'http3'
+      - if: steps.cache-images.outputs.cache-hit == 'true'
         name: Load saved docker images
         run: |
           if [[ -f docker-images-backup/apisix-images.tar ]]; then
@@ -131,7 +131,7 @@ jobs:
               sudo ./ci/init-${{ steps.test_env.outputs.type }}-test-service.sh after
             fi
           fi
-      - if: steps.cache-images.outputs.cache-hit != 'true' && steps.test_env.outputs.type != 'http3'
+      - if: steps.cache-images.outputs.cache-hit != 'true'
         name: Linux launch services
         run: |
           [[ ${{ steps.test_env.outputs.type }} != first ]] && sudo ./ci/init-${{ steps.test_env.outputs.type }}-test-service.sh before
