@@ -49,16 +49,16 @@ ADMIN put /routes/1 -d '{
 }'
 
 # Unauthorized
-REQ /httpbin/get -X GET -i --http3-only
+REQ /httpbin/get -X GET --ipv4 --http3-only
 GREP -x "HTTP/3 401"
 
 # Forbidden
-REQ /httpbin/get -X GET -i -u foo:bar --http3-only
+REQ /httpbin/get -X GET --ipv4 -u foo:bar --http3-only
 GREP -x "HTTP/3 403"
 
 # make 127.0.0.1 in the whitelist
 ADMIN patch /plugin_configs/1/plugins/ip-restriction/whitelist -d '["127.0.0.1"]'
 
 # ok
-REQ /httpbin/get -X GET -i -u foo:bar --http3-only
+REQ /httpbin/get -X GET --ipv4 -u foo:bar --http3-only
 GREP -x "HTTP/3 200"
