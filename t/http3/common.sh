@@ -50,6 +50,7 @@ REQ() {
 
 if [[ ! -f ./logs/nginx.pid ]]; then
     ./bin/apisix start
+    sleep 5
 fi
 
 tmpfile=$(mktemp)
