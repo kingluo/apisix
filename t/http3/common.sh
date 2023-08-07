@@ -44,8 +44,8 @@ GC rm_tmpfile
 
 REQ() {
     rm_tmpfile
-    curl https://localhost:9443"$@" -k -s -S -v -D ${tmpfile}-headers -o ${tmpfile}-body
-    sed -i 's/ \r//g; s/\r//g' ${tmpfile}-headers
+    curl https://localhost:9443"$@" -k -s -S -v -o ${tmpfile}-body 2>&1 | tee ${tmpfile}
+    grep -E '^< \w+' ${tmpfile} | sed 's/< //g; s/ \r//g; s/\r//g' > ${tmpfile}-headers
 }
 
 if [[ ! -f ./logs/nginx.pid ]]; then
