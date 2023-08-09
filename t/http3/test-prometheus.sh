@@ -41,4 +41,4 @@ REQ /anything/foobar --http3-only
 sleep 5
 cnt2=$(count_404)
 
-[[ $cnt2 -eq $(($cnt1 + 1)) ]]
+((cnt2 == cnt1 + 1))

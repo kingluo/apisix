@@ -46,6 +46,7 @@ fi
 set -e
 
 
+
 echo TEST 2: route-level mtls, skip mtls
 
 ADMIN put /ssls/1 -d '{
@@ -72,6 +73,7 @@ GREP -x "HTTP/3 200"
 
 # validate the response body, e.g. JSON body
 JQ '.headers["X-Forwarded-Host"] == "localhost"'
+
 
 
 echo TEST 3: route-level mtls, not in whitelist, cannot skip mtls
