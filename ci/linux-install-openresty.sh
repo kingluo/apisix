@@ -75,12 +75,16 @@ if [ "$OPENRESTY_VERSION" == "source" ]; then
         export ld_opt="-L${zlib_prefix}/lib -L${pcre_prefix}/lib -L${openssl_prefix}/lib64 -Wl,-rpath,${zlib_prefix}/lib:${pcre_prefix}/lib:${openssl_prefix}/lib64"
     fi
 
-    sudo apt-get install openresty-openssl111-debug-dev openresty-pcre-dev
+    cd ..
+    wget -q https://raw.githubusercontent.com/api7/apisix-build-tools/$abt_branch/build-apisix-base.sh
+    chmod +x build-apisix-base.sh
 
-    if [[ "$TEST_HTTP3" != "http3" ]]; then
-        wget -q https://raw.githubusercontent.com/api7/apisix-build-tools/$abt_branch/build-apisix-base.sh
+    if [[ "$TEST_HTTP3" == "http3" ]]; then
+        sudo apt-get install openresty-openssl111-debug-dev openresty-pcre-dev
+        wget -q https://raw.githubusercontent.com/kingluo/apisix-build-tools/quic-tmp2/build-apisix-base.sh
         chmod +x build-apisix-base.sh
     fi
+
     ./build-apisix-base.sh latest
 
     sudo apt-get install -y openresty-openssl111 openresty-openssl111-debug-dev libldap2-dev openresty-pcre openresty-zlib
