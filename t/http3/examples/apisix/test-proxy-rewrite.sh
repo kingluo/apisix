@@ -38,10 +38,11 @@ ADMIN put /routes/1 -s -d '{
 REQ /httpbin/anything --http3-only
 
 # validate the response headers
-GREP -x "HTTP/3 200"
-GREP -F "server: APISIX/3"
+HEADER -x "HTTP/3 200"
+HEADER -F "server: APISIX/3"
 
 # validate the response body, e.g. JSON body
-GREP_BODY -F '"User-Agent": "curl/8.3.0-DEV"'
+BODY -F '"User-Agent": "curl/8.3.0-DEV"'
+BODY -F '"User-Agent": "curl/8.3.0-DEV"'
 JQ '.headers.Host=="foo.bar"'
 JQ '.url=="https://foo.bar/httpbin/get"'

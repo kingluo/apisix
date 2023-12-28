@@ -34,6 +34,6 @@ ADMIN put /routes/1 -s -d '{
 REQ '/httpbin/get?realip=127.0.0.100:666' --ipv4 --http3-only
 
 # validate the response headers
-GREP -x "HTTP/3 200"
-GREP -x "remote-addr: 127.0.0.100"
-GREP -x "remote-port: 666"
+HEADER -x "HTTP/3 200"
+HEADER -x "remote-addr: 127.0.0.100"
+HEADER -x "remote-port: 666"

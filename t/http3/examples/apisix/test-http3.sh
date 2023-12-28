@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-set -euo pipefail
-set -x
+set -o pipefail
+set -eux
 
 . $(dirname "$0")/common.sh
+
+
 
 echo TEST 1: POST JSON
 
@@ -22,7 +24,7 @@ ADMIN put /routes/1 -s -d '{
 jo -p foo=bar abc=17 parser=false | REQ /httpbin/anything -X POST --json @- --http3-only
 
 # validate the response headers
-GREP -x "HTTP/3 200"
+HEADER -x "HTTP/3 200"
 
 # validate the response body, e.g. JSON body
 JQ '.json=={"foo":"bar","abc":17,"parser":false}'
@@ -35,7 +37,7 @@ echo TEST 2: PUT JSON
 jo -p foo=bar abc=17 parser=false | REQ /httpbin/anything -X PUT --json @- --http3-only
 
 # validate the response headers
-GREP -x "HTTP/3 200"
+HEADER -x "HTTP/3 200"
 
 # validate the response body, e.g. JSON body
 JQ '.method=="PUT"'
@@ -49,7 +51,7 @@ echo TEST 3: POST FORM
 REQ /httpbin/anything --http3 -d foo=bar -d hello=world
 
 # validate the response headers
-GREP -x "HTTP/3 200"
+HEADER -x "HTTP/3 200"
 
 # validate the response body, e.g. JSON body
 JQ '.method=="POST"'
@@ -63,7 +65,7 @@ echo TEST 4: DELETE
 REQ /httpbin/anything -X DELETE --http3
 
 # validate the response headers
-GREP -x "HTTP/3 200"
+HEADER -x "HTTP/3 200"
 
 # validate the response body, e.g. JSON body
 JQ '.method=="DELETE"'
@@ -88,7 +90,7 @@ GC gc
 REQ /httpbin/anything --http3 -F file1=@${file1} -F file2=@${file2}
 
 # validate the response headers
-GREP -x "HTTP/3 200"
+HEADER -x "HTTP/3 200"
 
 # validate the response body, e.g. JSON body
 JQ '.files.file1=="hello"'

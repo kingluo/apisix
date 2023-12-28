@@ -69,7 +69,7 @@ sleep 1
 REQ /httpbin/get --http3-only
 
 # validate the response headers
-GREP -x "HTTP/3 200"
+HEADER -x "HTTP/3 200"
 
 # validate the response body, e.g. JSON body
 JQ '.headers["X-Forwarded-Host"] == "localhost"'
@@ -83,4 +83,4 @@ REQ /httpbin/foobar --http3-only
 set -e
 
 # validate the response headers
-GREP -x "HTTP/3 400"
+HEADER -x "HTTP/3 400"
