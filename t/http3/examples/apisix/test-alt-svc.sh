@@ -1,9 +1,15 @@
 #!/usr/bin/env burl
 
 # configure apisix
-BURL apisix
-
 TEST_PORT=9443
+
+ADMIN put /ssls/1 -d '{
+    "cert": "'"$(<${BURL_ROOT}/examples/server.crt)"'",
+    "key": "'"$(<${BURL_ROOT}/examples/server.key)"'",
+    "snis": [
+        "localhost"
+    ]
+}'
 
 ADMIN put /routes/1 -s -d '{
     "uri": "/httpbin/*",

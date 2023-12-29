@@ -1,6 +1,6 @@
 #!/usr/bin/env burl
 
-# Configure Nginx
+# Configure and start Nginx
 SET NGX_CONF_HTTP <<EOF
 upstream test_backend {
     server $(dig +short nghttp2.org):443;
@@ -21,7 +21,7 @@ location / {
 }
 EOF
 
-BURL nginx
+START_NGX
 
 
 

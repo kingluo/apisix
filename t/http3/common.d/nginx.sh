@@ -12,7 +12,7 @@ nginx_stop() {
 
 GC nginx_stop
 
-nginx_start() {
+START_NGX() {
     mkdir -p ${NGX_TMP}/{conf,logs}
     printf "${NGX_CONF_TEMPLATE}" \
         "${NGX_CONF_MAIN:-}" "${NGX_CONF_HTTP:-}" "${NGX_CONF:-}" \

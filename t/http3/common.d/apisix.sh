@@ -6,18 +6,3 @@ ADMIN() {
         -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X $method "$@"
     sleep 1
 }
-
-apisix_start() {
-    if [[ ! -f ./logs/nginx.pid ]] && [[ -x ./bin/apisix ]]; then
-        ./bin/apisix start
-        sleep 3
-
-        ADMIN put /ssls/1 -d '{
-            "cert": "'"$(<${BURL_ROOT}/examples/server.crt)"'",
-            "key": "'"$(<${BURL_ROOT}/examples/server.key)"'",
-            "snis": [
-                "localhost"
-            ]
-        }'
-    fi
-}

@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
-set -o pipefail
-set -eux
+set -euo pipefail
 
-BURL_ROOT="$(dirname `realpath $0`)"
+export BURL_ROOT="$(dirname `realpath $0`)"
 
-. ${BURL_ROOT}/common.sh
+RUN_TEST_FILE() {
+    (
+        set -o pipefail
+        set -eux
+        . ${BURL_ROOT}/common.sh
+        . "$@"
+        echo "--- $1 OK"
+    )
+}
 
 for f in "$@"; do
     if [[ -d $f ]]; then
         for ff in $f/test-*.sh; do
-            . ${ff}
-            echo "--- ${ff} OK"
-            BURL_STOP
+            RUN_TEST_FILE "${ff}"
         done
     elif [[ -f $f ]]; then
-        . $f
-        BURL_STOP
-        echo "--- $f OK"
-    else
-        if [[ $1 == "init" ]]; then
-            cp -a ${BURL_ROOT}/test-example.sh ${2:-test-example.sh}
-            exit
-        fi
+        RUN_TEST_FILE "$f"
     fi
 done
 
-echo -e "\nAll tests successful! ;-)"
+if [[ $# > 0 ]]; then
+    echo -e "\nAll tests successful! ;-)"
+fi
